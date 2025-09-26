@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Peta Buatan Raisal</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS dari CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    body { margin:0; padding:0; font-family: Arial, sans-serif; }
+    #map { height: 85vh; width: 100%; }
+
+    /* Header judul */
+    #header {
+      text-align: center;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      background: #2c3e50;
+      color: white;
+    }
+
+    /* Panel input */
+    #panel {
+      padding: 10px;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      text-align: center;
+    }
+    #panel input {
+      padding: 6px;
+      width: 60%;
+      max-width: 250px;
+    }
+    #panel button {
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header">🌍 Peta Buatan Raisal 🌍</div>
+
+  <div id="panel">
+    Masukkan nama kota: 
+    <input type="text" id="cityInput" placeholder="contoh: Jakarta">
+    <button onclick="goToCity()">Cari</button>
+  </div>
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS dari CDN -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Inisialisasi peta
+    var map = L.map('map').setView([-2, 118], 5);
+
+    // Basemap OSM
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Data kota
+    var cities = {
+      "Jakarta": [-6.2, 106.8],
+      "Bandung": [-6.9175, 107.6191],
+      "Surabaya": [-7.2504, 112.7688],
+      "Medan": [3.5952, 98.6722],
+      "Makassar": [-5.1477, 119.4327]
+    };
+
+    // Tambahkan marker untuk tiap kota
+    for (var city in cities) {
+      L.marker(cities[city]).addTo(map)
+        .bindPopup("<b>" + city + "</b>");
+    }
+
+    // Fungsi pencarian
+    function goToCity() {
+      var input = document.getElementById("cityInput").value.trim();
+      if (cities[input]) {
+        map.setView(cities[input], 10);
+      } else {
+        alert("Kota tidak ditemukan. Coba: Jakarta, Bandung, Surabaya, Medan, Makassar.");
+      }
+    }
+  </script>
+</body>
+</html>
